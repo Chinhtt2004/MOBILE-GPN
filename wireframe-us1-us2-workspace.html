@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wireframe tạo &amp; lời mời</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap">
+<style>
+/* Bố cục: bàn review – thanh điều khiển ở trên, "bản in" điện thoại bên trái, ghi chú review bám theo bên phải; nền giấy kẻ ô của wireframe */
+:root{
+  --bg:#edf0f5;--surface:#ffffff;--surface-2:#f5f7fa;--ink:#17233a;--muted:#5b6880;--line:#d9e0ea;
+  --accent:#2357d6;--accent-ink:#ffffff;--accent-soft:#e7eeff;--note:#8a5a00;--note-soft:#fff3d6;--frame:#121925;--grid:rgba(35,87,214,.06);--shadow:rgba(15,23,42,.30);
+  --a-bg:#ffffff;--a-ink:#1c2a3f;--a-muted:#64748b;--a-line:#e4e9f0;--a-sunk:#f5f7fb;--a-pri:#0b5cff;--a-pri-soft:#e7eeff;--a-ok:#1e8e4f;--a-ok-soft:#e3f6e8;--a-err:#c53030;--a-err-soft:#fdeceb;--a-warn:#b7791f;--a-warn-soft:#fff6e0;
+  --f-ui:"Be Vietnam Pro",-apple-system,"Segoe UI",Arial,sans-serif;
+  --f-ios:-apple-system,"SF Pro Text","Be Vietnam Pro","Segoe UI",Arial,sans-serif;
+  --f-android:Roboto,"Be Vietnam Pro","Segoe UI",Arial,sans-serif;
+  --f-mono:ui-monospace,"Cascadia Mono",Consolas,"Courier New",monospace;
+  color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d131d;--surface:#151d2a;--surface-2:#1b2535;--ink:#e5ebf4;--muted:#9babc0;--line:#2a3647;--accent:#7ea3ff;--accent-ink:#0d131d;--accent-soft:#1c2a48;--note:#f2bd5a;--note-soft:#2c2414;--frame:#04070c;--grid:rgba(126,163,255,.05);--shadow:rgba(0,0,0,.6);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d131d;--surface:#151d2a;--surface-2:#1b2535;--ink:#e5ebf4;--muted:#9babc0;--line:#2a3647;--accent:#7ea3ff;--accent-ink:#0d131d;--accent-soft:#1c2a48;--note:#f2bd5a;--note-soft:#2c2414;--frame:#04070c;--grid:rgba(126,163,255,.05);--shadow:rgba(0,0,0,.6);color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--f-ui);font-size:15px;color:var(--ink);background-color:var(--bg);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;padding-block:24px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.i{width:1.15em;height:1.15em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none;vertical-align:-.2em}
+
+/* ---------- khung trang ---------- */
+.wrap{max-width:1180px;margin:0 auto;display:grid;gap:18px}
+.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px}
+.brand{display:flex;gap:14px;align-items:center;min-width:0}
+.mark{width:44px;height:44px;border-radius:12px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-weight:700;font-size:20px;flex:none}
+.top h1{font-size:clamp(22px,3vw,28px);margin:0;font-weight:700;letter-spacing:-.01em;line-height:1.2;text-wrap:balance}
+.top p{margin:3px 0 0;color:var(--muted);font-size:14px}
+.stamp{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--note);background:var(--note-soft);border:1px dashed var(--note);padding:6px 10px;border-radius:6px}
+.ctrl{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:grid;grid-template-columns:96px minmax(0,1fr);gap:14px 16px;align-items:center}
+.lb{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px;justify-self:start}
+.seg button{border:0;background:none;padding:7px 18px;border-radius:7px;font-weight:600;font-size:14px;color:var(--muted);cursor:pointer;transition:background .15s,color .15s}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px var(--shadow)}
+.row2{display:flex;flex-wrap:wrap;gap:10px;align-items:center;min-width:0}
+.sel{position:relative;display:inline-block;max-width:100%}
+.sel::after{content:"";position:absolute;right:14px;top:50%;width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.sel select{appearance:none;-webkit-appearance:none;font-size:14px;padding:9px 38px 9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);color:var(--ink);max-width:100%;cursor:pointer}
+.acts{display:flex;flex-wrap:wrap;gap:8px}
+.cbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);border-radius:10px;padding:8px 12px;font-size:13.5px;font-weight:500;cursor:pointer;transition:border-color .15s,color .15s}
+.cbtn:hover{border-color:var(--accent);color:var(--accent)}.cbtn .i{width:16px;height:16px}
+.tabbar{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:2px;border-bottom:1px solid var(--line);margin:-6px 0 2px}
+.tabbar button{border:0;background:none;padding:10px 14px;font-weight:600;font-size:15px;color:var(--muted);cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1px;display:inline-flex;gap:8px;align-items:center;transition:color .15s,border-color .15s}
+.tabbar button:hover{color:var(--ink)}
+.tabbar button[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.tabbar .cnt{font-size:11.5px;font-weight:600;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:1px 8px;color:var(--muted)}
+.tabdesc{grid-column:1/-1;color:var(--muted);font-size:13.5px;margin:0 0 2px;max-width:80ch}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.tgl{position:relative;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:6px 13px 6px 10px;font-size:13px;color:var(--muted);cursor:pointer;background:var(--surface);transition:all .15s;user-select:none}
+.tgl:hover{border-color:var(--accent)}
+.tgl input{position:absolute;opacity:0;pointer-events:none}
+.tgl .bx{width:15px;height:15px;border-radius:4px;border:1.5px solid currentColor;display:grid;place-items:center}
+.tgl .bx .i{width:11px;height:11px;stroke-width:3.2;stroke:var(--accent-ink);opacity:0}
+.tgl:has(input:checked){border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.tgl:has(input:checked) .bx{background:var(--accent);border-color:var(--accent)}
+.tgl:has(input:checked) .bx .i{opacity:1}
+.tgl:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
+.stage{display:grid;grid-template-columns:380px minmax(0,1fr);gap:32px;align-items:start}
+.notes{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 22px;font-size:14.5px;line-height:1.6;min-width:0}
+.eb{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.notes h2{font-size:21px;margin:4px 0 10px;line-height:1.3;text-wrap:balance}
+.refs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.ref{font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.notes p{margin:0 0 14px;max-width:62ch}
+.rule{border:1px dashed var(--note);background:var(--note-soft);color:var(--ink);padding:10px 14px;border-radius:10px;font-size:13.5px;line-height:1.55}
+.rule b{color:var(--note)}
+.boards{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.boards nav{display:flex;flex-wrap:wrap;gap:6px 8px;margin-top:8px}
+.boards a{color:var(--accent);font-weight:600;font-size:13.5px;text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:5px 10px}
+.boards a:hover{border-color:var(--accent);background:var(--accent-soft)}
+@media(max-width:860px){.stage{grid-template-columns:minmax(0,1fr)}.ph{margin:0 auto}.notes{position:static}.ctrl{grid-template-columns:minmax(0,1fr);gap:8px 16px}.ctrl .lb{margin-top:6px}}
+
+/* ---------- điện thoại (giao diện app luôn sáng) ---------- */
+.ph{--ink:var(--a-ink);--muted:var(--a-muted);--line:var(--a-line);--pri:var(--a-pri);--pri-soft:var(--a-pri-soft);--ok:var(--a-ok);--ok-soft:var(--a-ok-soft);--err:var(--a-err);--err-soft:var(--a-err-soft);--warn:var(--a-warn);--warn-soft:var(--a-warn-soft);
+  color-scheme:light;color:var(--ink);width:360px;height:740px;background:var(--a-bg);position:relative;overflow:hidden;border:10px solid var(--frame);border-radius:46px;box-shadow:0 0 0 1px var(--line),0 30px 60px -22px var(--shadow),0 3px 8px var(--shadow);font-size:15px;font-family:var(--f-ios)}
+.ph.android{border-width:8px;border-radius:32px;font-family:var(--f-android)}
+.sb{height:40px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:13px;font-weight:600;position:relative;z-index:6;background:inherit}
+.ios .sb .island{position:absolute;left:50%;top:8px;width:96px;height:26px;margin-left:-48px;background:#0b0f16;border-radius:16px}
+.android .sb{height:32px;padding:0 18px;font-weight:500}.android .sb .island{position:absolute;left:50%;top:9px;width:12px;height:12px;margin-left:-6px;background:#0b0f16;border-radius:50%}
+.sbi{display:flex;gap:5px;align-items:center;font-size:11px}.bat{width:22px;height:11px;border:1.5px solid currentColor;border-radius:3px;position:relative}.bat:after{content:"";position:absolute;inset:1.5px 5px 1.5px 1.5px;background:currentColor;border-radius:1px}
+.scr{position:absolute;top:40px;left:0;right:0;bottom:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}.scr::-webkit-scrollbar{display:none}.android .scr{top:32px}
+.scr.withtab{bottom:64px}
+.hi{position:absolute;bottom:7px;left:50%;width:120px;height:5px;margin-left:-60px;background:#0b0f16;border-radius:3px;z-index:20}.android .hi{width:96px;height:4px;margin-left:-48px;background:#5b6472}
+.pad{padding:8px 20px 28px}
+.nav{display:grid;grid-template-columns:64px 1fr 64px;align-items:center;height:46px;padding:0 8px}
+.nav .t{text-align:center;font-weight:600;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav .l{color:var(--pri);padding:0 6px;cursor:pointer;background:none;border:0;text-align:left;display:flex;align-items:center}.nav .l .i{width:26px;height:26px;stroke-width:2.3}
+.nav .r{color:var(--pri);text-align:right;padding-right:8px;font-size:16px;cursor:pointer;background:none;border:0}
+.android .nav{display:flex;height:56px;padding:0 6px;gap:4px}.android .nav .t{text-align:left;font-weight:500;font-size:20px;flex:1}.android .nav .l{color:var(--ink);padding:8px 12px}.android .nav .l .i{width:22px;height:22px;stroke-width:2}.android .nav .r{font-weight:500;font-size:15px}
+.ph h1{font-size:28px;margin:12px 0 6px;font-weight:700;line-height:1.2;letter-spacing:-.01em}.android h1{font-weight:500;font-size:26px;letter-spacing:0}
+.muted{color:var(--muted)}.small{font-size:13px}.desc{color:var(--muted);margin:2px 0 18px;line-height:1.5}
+.logo{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#2b66e8,#1a4fc4);color:#fff;display:grid;place-items:center;font-weight:700;font-size:20px;margin-top:6px;box-shadow:0 6px 14px -6px rgba(31,91,216,.6)}
+.card{display:flex;gap:14px;align-items:center;border:1px solid var(--line);border-radius:16px;padding:14px;margin:12px 0;cursor:pointer;background:#fff;width:100%;text-align:left;transition:border-color .15s,background .15s,transform .1s;box-shadow:0 1px 2px rgba(15,23,42,.04)}
+.card:hover{border-color:#bccdf3}.card:active{background:var(--a-sunk);transform:scale(.99)}
+.android .card{border-radius:18px;background:#f6f8fd;box-shadow:none}
+.card .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;flex:none}.card .ic .i{width:22px;height:22px}
+.card b{display:flex;align-items:center;font-size:16px;white-space:nowrap}.card span{color:var(--muted);font-size:13px}.card .badge{color:#fff;font-size:11.5px}
+.card .chev{margin-left:auto;color:#a3b0c2;display:flex}.card .chev .i{width:18px;height:18px}
+.ic.c1{background:var(--pri-soft);color:var(--pri)}.ic.c2{background:#efe8fd;color:#6b46c1}
+.badge{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:#e53e3e;color:#fff;font-size:11.5px;font-weight:700;margin-left:6px;vertical-align:2px}
+.sec{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin:22px 0 8px}
+.android .sec{text-transform:none;letter-spacing:0;font-size:14px;color:var(--pri);font-weight:500}
+.box{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff;transition:box-shadow .3s}.box.hl{box-shadow:0 0 0 3px #b9cdf7}
+.inv{padding:12px 14px;border-bottom:1px solid var(--line)}.inv:last-child{border-bottom:0}
+.row{display:flex;gap:12px;align-items:center}
+.av{width:38px;height:38px;border-radius:11px;color:#fff;display:grid;place-items:center;font-weight:700;flex:none}
+.inv .nm{font-weight:600}.inv .by{font-size:13px;color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:50px;border-radius:13px;border:1px solid #c7d0dc;background:#fff;font-weight:600;cursor:pointer;padding:0 14px;transition:transform .1s,filter .15s,background .15s}
+.btn:active:not(:disabled){transform:scale(.98)}
+.btn.sm{min-height:38px;font-size:14px;border-radius:10px}
+.android .btn{border-radius:24px;font-weight:500;min-height:48px}.android .btn.sm{border-radius:20px;min-height:38px}
+.btn.pri{background:var(--pri);border-color:var(--pri);color:#fff;box-shadow:0 4px 12px -6px rgba(31,91,216,.7)}
+.btn.pri:hover:not(:disabled){filter:brightness(1.07)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.pri:disabled{background:#a8bff0;border-color:#a8bff0;opacity:1;box-shadow:none}
+.btn.ghost{border:0;background:none;color:var(--pri);box-shadow:none}
+.spin{width:16px;height:16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;display:inline-block;animation:sp .8s linear infinite;flex:none}
+.spin.big{width:28px;height:28px;border-width:3px;color:var(--pri)}
+@keyframes sp{to{transform:rotate(360deg)}}
+.empty{text-align:center;padding:22px 16px;color:var(--muted);font-size:14px;line-height:1.55}
+.empty .big{display:grid;place-items:center;width:56px;height:56px;border-radius:50%;background:var(--a-sunk);color:#8ea0b8;margin:0 auto 10px}.empty .big .i{width:26px;height:26px}
+.empty b{color:var(--ink)}
+.bigic{display:grid;place-items:center;width:76px;height:76px;border-radius:50%;background:var(--a-sunk);color:#8ea0b8}.bigic .i{width:36px;height:36px}
+.sk{height:12px;border-radius:6px;background:linear-gradient(90deg,#e9edf3 0%,#f4f6f9 50%,#e9edf3 100%);background-size:200% 100%;animation:sh 1.2s linear infinite;margin:6px 0}.sk.a{width:55%}.sk.b{width:80%}.av.skv{background:#e9edf3}
+@keyframes sh{to{background-position:-200% 0}}
+.acct{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);display:flex;justify-content:space-between;gap:8px;align-items:center}
+.acct button{background:none;border:0;color:var(--err);font-weight:600;cursor:pointer;padding:6px 0}
+label.f{display:block;font-weight:600;font-size:14px;margin:4px 0 8px}
+.inp{width:100%;border:1px solid #c7d0dc;border-radius:12px;padding:13px 14px;font-size:16px;background:#fff;transition:border-color .15s,box-shadow .15s}
+.inp:focus{outline:0;border-color:var(--pri);box-shadow:0 0 0 3px var(--pri-soft)}
+.android .inp{border-radius:6px}
+.inp.bad,.inp.bad:focus{border-color:var(--err);box-shadow:0 0 0 1px var(--err)}
+.inp:disabled{background:#f5f7fa;color:#7b8794}
+.meta{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);margin:6px 2px 0;gap:10px;font-variant-numeric:tabular-nums}.meta .e{color:var(--err)}.meta .cnt.over{color:var(--err);font-weight:600}
+.banner{border-radius:11px;padding:10px 12px;font-size:13.5px;line-height:1.45;margin:16px 0 0}
+.banner .i{width:16px;height:16px;vertical-align:-3px;margin-right:5px;stroke-width:2.1}
+.banner.err{background:var(--err-soft);color:#8a1f1f}.banner.warn{background:var(--warn-soft);color:#7a4b00}.banner.ok{background:var(--ok-soft);color:#14532d}
+.mt{margin-top:22px}
+.chipbox{border:1px solid #c7d0dc;border-radius:12px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;min-height:52px;background:#fff;transition:border-color .15s,box-shadow .15s}
+.chipbox:focus-within{border-color:var(--pri);box-shadow:0 0 0 3px var(--pri-soft)}
+.android .chipbox{border-radius:6px}.chipbox.bad,.chipbox.bad:focus-within{border-color:var(--err);box-shadow:0 0 0 1px var(--err)}
+.chip{display:inline-flex;align-items:center;gap:6px;background:#eef2f7;border-radius:16px;padding:5px 8px 5px 11px;font-size:13.5px;max-width:100%}
+.chip.err{background:var(--err-soft);color:#8a1f1f;border:1px solid #f3b4b4}
+.chip button{border:0;background:none;cursor:pointer;color:inherit;padding:2px;display:flex;border-radius:50%}.chip button:hover{background:rgba(0,0,0,.07)}.chip button .i{width:12px;height:12px;stroke-width:2.6}
+.chip small{display:block;font-size:11.5px}
+.chipbox input{border:0;outline:0;flex:1;min-width:140px;padding:6px 4px;font-size:15px;background:transparent}
+/* app */
+.apphd{display:flex;align-items:center;gap:10px;padding:8px 14px 10px;border-bottom:1px solid var(--line);background:#fff}
+.wsbtn{display:flex;align-items:center;gap:10px;background:none;border:0;cursor:pointer;padding:4px;flex:1;min-width:0;text-align:left;border-radius:10px}.wsbtn:hover{background:var(--a-sunk)}
+.wsbtn .n{font-weight:700;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:2px}.wsbtn .n .i{width:16px;height:16px;color:#94a3b8}
+.tag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;background:#eef2f7;color:#475569;text-transform:uppercase}.tag.ad{background:var(--pri-soft);color:var(--pri)}
+.iconbtn{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;border:0;background:#f1f5f9;cursor:pointer;flex:none;color:var(--ink)}.iconbtn .i{width:18px;height:18px}
+.goni{text-align:center;padding:44px 22px}.goni .spark{display:inline-grid;place-items:center;width:64px;height:64px;border-radius:20px;background:var(--pri-soft);color:var(--pri)}.goni .spark .i{width:30px;height:30px;fill:currentColor;stroke:none}.goni h2{font-size:22px;margin:14px 0 6px;line-height:1.3}
+.sug{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px}.sug span{border:1px solid var(--line);border-radius:18px;padding:7px 12px;font-size:13px}
+.ask{position:absolute;left:14px;right:14px;bottom:76px;border:1px solid var(--line);border-radius:22px;padding:11px 16px;color:#94a3b8;font-size:14px;background:#fff;box-shadow:0 4px 14px -8px rgba(15,23,42,.2)}
+.tabs{position:absolute;bottom:0;left:0;right:0;height:64px;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);font-size:11px;color:#94a3b8;text-align:center;padding-top:8px;background:#fff;z-index:3}
+.tabs b{display:flex;justify-content:center;margin-bottom:2px}.tabs b .i{width:21px;height:21px}.tabs .on{color:var(--pri);font-weight:600}
+/* switcher */
+.dim{position:absolute;inset:0;background:rgba(15,23,42,.38);z-index:8}
+.drop{position:absolute;left:10px;right:10px;top:104px;background:#fff;border-radius:18px;z-index:9;box-shadow:0 18px 40px rgba(0,0,0,.22);max-height:560px;overflow:auto;padding:4px 0}
+.android .drop{top:96px}
+.drop .sec{margin:12px 16px 6px}
+.wsi{display:flex;align-items:center;gap:12px;padding:10px 16px;cursor:pointer;width:100%;background:none;border:0;text-align:left}.wsi:hover{background:var(--a-sunk)}
+.wsi.cur{background:#f5f8ff}.wsi .meta2{font-size:12px;color:var(--muted)}.wsi .ck{margin-left:auto;color:var(--pri);display:flex}.wsi .ck .i{width:18px;height:18px;stroke-width:2.4}
+.drop .inv{border:0;border-top:1px solid var(--line)}
+.act{display:flex;align-items:center;gap:12px;padding:13px 16px;color:var(--pri);font-weight:600;border-top:1px solid var(--line);cursor:pointer;width:100%;background:none;border-left:0;border-right:0;border-bottom:0;text-align:left}.act:hover{background:var(--a-sunk)}
+.act .pl{width:32px;height:32px;border:1.5px solid var(--pri);border-radius:9px;display:grid;place-items:center}.act .pl .i{width:16px;height:16px}.act .end{margin-left:auto;color:#94a3b8;display:flex}.act .end .i{width:16px;height:16px}
+/* toast */
+.toast{position:absolute;z-index:15;left:50%;transform:translateX(-50%);display:flex;gap:10px;align-items:center;font-size:14px;max-width:320px;width:max-content}
+.ios .toast{top:50px;background:#fff;border-radius:22px;padding:10px 16px;box-shadow:0 8px 26px rgba(0,0,0,.18)}
+.android .toast{bottom:76px;background:#2b3442;color:#fff;border-radius:6px;padding:12px 14px;width:330px;justify-content:space-between}
+.toast .okic{color:var(--ok);display:inline-flex;vertical-align:-3px;margin-right:4px}.toast .okic .i{width:16px;height:16px;stroke-width:2.6}
+.toast button{border:0;background:none;color:var(--pri);font-weight:700;cursor:pointer}.android .toast button{color:#9ec1ff}
+/* dialog */
+.dlg{position:absolute;z-index:12;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff}
+.ios .dlg{width:270px;border-radius:14px;text-align:center;background:#f7f7f8;box-shadow:0 20px 40px rgba(0,0,0,.2)}
+.ios .dlg .c{padding:18px 16px 14px}.ios .dlg h3{font-size:17px;margin:0 0 4px}.ios .dlg p{margin:0;font-size:13.5px;line-height:1.4}
+.ios .dlg .bs{display:flex;border-top:1px solid #d5d7db}.ios .dlg .bs button{flex:1;border:0;background:none;padding:12px;color:#0a64e0;font-size:16px;cursor:pointer}.ios .dlg .bs button+button{border-left:1px solid #d5d7db}
+.ios .dlg .bs .strong{font-weight:600}.ios .dlg .bs .danger{color:#d93025}
+.android .dlg{width:300px;border-radius:28px;padding:24px 24px 12px;background:#f3f5fb;box-shadow:0 20px 40px rgba(0,0,0,.2)}.android .dlg h3{font-size:22px;font-weight:400;margin:0 0 12px}.android .dlg p{margin:0;color:#475569;line-height:1.5;font-size:14px}
+.android .dlg .bs{display:flex;justify-content:flex-end;gap:4px;margin-top:18px}.android .dlg .bs button{border:0;background:none;color:var(--pri);font-weight:500;padding:10px 12px;cursor:pointer;border-radius:20px}.android .dlg .bs button:hover{background:var(--pri-soft)}.android .dlg .bs .danger{color:var(--err)}
+.dmeta{font-size:12px;font-weight:600;color:var(--pri);margin-bottom:6px;letter-spacing:.02em}
+.dlg button:disabled{opacity:.45;cursor:default}
+.dlg.list .bs{flex-direction:column;align-items:stretch}
+.ios .dlg.list .bs button+button{border-left:0;border-top:1px solid #d5d7db}
+.android .dlg.list .bs button{text-align:left}
+.rolebar{display:flex;align-items:center;gap:6px;margin-top:14px;font-size:14px;padding:10px 12px;background:var(--a-sunk);border-radius:10px}
+.rolebar button{margin-left:auto;border:0;background:none;color:var(--pri);font-weight:600;cursor:pointer;padding:2px 4px}
+.center{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;height:100%;padding:0 32px;gap:12px}
+/* ---------- giao diện theo design tham khảo (29/10) ---------- */
+.ph{background:#f4f3fb}
+.scr.soft{background:linear-gradient(180deg,#f5f3fc 0%,#eef1fa 60%,#eef0f8 100%)}
+.tb{display:flex;align-items:center;justify-content:space-between;padding:8px 20px 4px}
+.brand2{display:flex;align-items:center;gap:8px;font-weight:600;font-size:13.5px}
+.brand2 i{font-style:normal;width:24px;height:24px;border-radius:7px;background:#1d2433;color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700}
+.logout{display:flex;align-items:center;gap:5px;border:0;background:none;color:#e03131;font-weight:600;font-size:13px;cursor:pointer;padding:6px 0}
+.logout .i{width:15px;height:15px;stroke-width:2}
+.bk{display:flex;align-items:center;justify-content:center;width:36px;height:36px;margin:6px 0 0 10px;border:0;background:none;color:var(--ink);cursor:pointer;border-radius:10px}
+.bk:hover{background:rgba(15,23,42,.05)}.bk .i{width:20px;height:20px;stroke-width:2.2}
+.bkrow{display:flex;align-items:center;justify-content:space-between;padding-right:16px}
+.bkrow .skip{border:0;background:none;color:var(--pri);font-weight:600;font-size:15px;cursor:pointer;padding:8px 4px}
+.bkrow .skip:disabled{opacity:.4}
+.body{padding:10px 20px 96px}
+.h{font-size:23px;font-weight:700;line-height:1.3;margin:6px 0 4px;letter-spacing:-.01em;text-wrap:balance}
+.android .h{font-weight:600}
+.sub{color:var(--muted);font-size:13.5px;line-height:1.5;margin:0 0 16px}
+.who{font-size:12.5px;color:var(--muted);margin:-8px 0 16px}.who b{color:var(--ink);font-weight:600}
+.opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:#fff;border:1px solid #eceef5;border-radius:16px;padding:14px;margin:0 0 12px;cursor:pointer;box-shadow:0 1px 2px rgba(20,24,60,.04);transition:border-color .15s,transform .1s}
+.opt:hover{border-color:#c9d6ff}.opt:active{transform:scale(.99)}
+.opt .ot{width:42px;height:42px;border-radius:50%;background:#eef0f6;color:#475569;display:grid;place-items:center;flex:none}.opt .ot .i{width:20px;height:20px}
+.opt .ot.blue{background:var(--pri-soft);color:var(--pri)}
+.opt b{display:flex;align-items:center;font-size:15px;font-weight:600}.opt small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.opt .chev{margin-left:auto;color:#9aa3b5;display:flex}.opt .chev .i{width:18px;height:18px}
+.search{display:flex;align-items:center;gap:8px;background:#e9e9f2;border-radius:12px;padding:0 12px;margin:0 0 6px}
+.search .i{width:17px;height:17px;color:#7c8598}
+.search input{border:0;background:none;outline:0;flex:1;min-width:0;padding:11px 0;font-size:14px}
+.search:focus-within{box-shadow:0 0 0 2px var(--pri-soft)}
+.lab{font-size:12.5px;color:var(--muted);font-weight:500;margin:16px 2px 8px}
+.wcard{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;border:1px solid #eceef5;border-radius:16px;padding:12px 14px;margin:0 0 10px;cursor:pointer;box-shadow:0 1px 2px rgba(20,24,60,.04);transition:border-color .15s}
+.wcard:hover{border-color:#c9d6ff}
+.avc{width:40px;height:40px;border-radius:50%;color:#fff;display:grid;place-items:center;font-weight:700;flex:none}
+.wcard .nm{font-weight:600;font-size:15px;margin-top:4px}
+.wcard .lt{font-size:12px;color:var(--muted);margin-top:2px}.wcard .lt.new{color:var(--pri)}
+.wcard .chev{margin-left:auto;color:#9aa3b5;display:flex}.wcard .chev .i{width:18px;height:18px}
+.rtag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.05em;padding:2px 7px;border-radius:5px;background:#eef0f4;color:#4b5563;text-transform:uppercase}
+.rtag.ad{background:var(--pri-soft);color:var(--pri)}
+.icard{background:#fff;border:1px solid #eceef5;border-radius:16px;padding:14px;margin:0 0 10px;box-shadow:0 2px 8px -4px rgba(20,24,60,.12)}
+.icard .top{display:flex;align-items:flex-start;gap:12px;flex-wrap:nowrap;justify-content:flex-start}
+.icard .nm{font-weight:600;font-size:15px}
+.icard .pos{font-size:12.5px;color:#e5484d;margin-top:1px}
+.icard .by{font-size:12px;color:var(--muted);margin-top:1px}
+.wait{margin-left:auto;font-size:11px;font-weight:600;color:#e8590c;background:#fff1e6;border-radius:999px;padding:3px 9px;white-space:nowrap}
+.icard .two{margin-top:12px}
+.ecard{background:#fff;border:1px solid #eceef5;border-radius:16px}
+.fab{position:absolute;right:20px;bottom:30px;width:54px;height:54px;border-radius:50%;border:0;background:var(--pri);color:#fff;display:grid;place-items:center;cursor:pointer;z-index:5;box-shadow:0 10px 22px -8px rgba(11,92,255,.75)}
+.fab .i{width:24px;height:24px;stroke-width:2.4}.fab:active{transform:scale(.96)}
+.android .fab{border-radius:16px;width:56px;height:56px}
+.ifield{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #9db6ff;border-radius:12px;padding:0 14px;transition:border-color .15s,box-shadow .15s}
+.ifield .i{width:18px;height:18px;color:#7c8598}
+.ifield input{border:0;outline:0;background:none;flex:1;min-width:0;padding:14px 0;font-size:15px}
+.ifield:focus-within{border-color:var(--pri);box-shadow:0 0 0 3px var(--pri-soft)}
+.ifield.bad{border-color:var(--err);box-shadow:0 0 0 1px var(--err)}
+.ifield.dis{background:#f5f6fa;border-color:#dfe3ec}.ifield.dis input{color:#7b8794}
+.btn.pri{box-shadow:0 8px 18px -10px rgba(11,92,255,.8)}
+.body .btn{min-height:50px}
+.android .wcard,.android .opt,.android .icard{border-radius:18px}
+/* chuyển động: chỉ chạy khi màn/lớp phủ vừa đổi */
+.ph.moved .scr{animation:scrIn .24s cubic-bezier(.2,.8,.2,1)}
+.ph.fresh .dim{animation:fade .2s ease-out}
+.ph.fresh .drop{animation:dropIn .24s cubic-bezier(.2,.8,.2,1)}
+.ph.fresh .dlg{animation:pop .2s cubic-bezier(.2,.8,.2,1)}
+.ios.fresh .toast{animation:tIos .3s cubic-bezier(.2,.8,.2,1)}
+.android.fresh .toast{animation:tAnd .3s cubic-bezier(.2,.8,.2,1)}
+@keyframes scrIn{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}}
+@keyframes dropIn{from{opacity:0;transform:translateY(-10px)}}
+@keyframes pop{from{opacity:0;transform:translate(-50%,-50%) scale(.94)}}
+@keyframes tIos{from{opacity:0;transform:translate(-50%,-14px)}}
+@keyframes tAnd{from{opacity:0;transform:translate(-50%,14px)}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+/* bảng màn hình (xuất ảnh cho tài liệu) */
+.board{padding:10px 10px 20px;background:var(--surface);width:max-content}
+.board h1{font-size:34px;color:var(--accent);margin:0}.board .bsub{color:var(--muted);font-size:17px;margin:4px 0 18px}
+.board .back{display:inline-block;margin-bottom:12px;color:var(--accent);font-weight:600;text-decoration:none}
+.grid{display:grid;grid-template-columns:repeat(4,360px);gap:22px 28px}
+.cell .ttl{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16.5px;margin:0 0 10px}
+.cell .ttl i{font-style:normal;background:var(--accent);color:var(--accent-ink);border-radius:50%;width:28px;height:28px;display:grid;place-items:center;font-size:13px;flex:none}
+.cell .ph{box-shadow:none}
+.bfoot{margin-top:16px;color:var(--muted);font-size:14px}
+</style></head>
+<body>
+<div id="app"></div>
+<script>
+/* ======================= biểu tượng ======================= */
+const P={plus:'<path d="M12 5v14M5 12h14"/>',join:'<path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4"/><path d="M9 16l4-4-4-4"/><path d="M13 12H3"/>',mail:'<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7.5 8.5 6 8.5-6"/>',cloud:'<path d="M17.5 19H7a5 5 0 1 1 1.6-9.74A6 6 0 0 1 20 11.5 3.75 3.75 0 0 1 17.5 19z"/><path d="M12 10.5v3.5M12 16.6v.01"/>',spark:'<path d="M12 2.5l2.2 6.3 6.3 2.2-6.3 2.2L12 19.5l-2.2-6.3L3.5 11l6.3-2.2z"/>',home:'<path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 9.5V20h13V9.5"/>',task:'<rect x="4" y="4" width="16" height="16" rx="3.5"/><path d="m8.5 12 2.5 2.5 4.5-5"/>',chat:'<path d="M20.5 12a8.5 8.5 0 0 1-12.4 7.5L3.5 20.5l1.2-4.3A8.5 8.5 0 1 1 20.5 12z"/>',bell:'<path d="M6 16.5V11a6 6 0 1 1 12 0v5.5l1.5 1.5h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',userplus:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M19 8v6M16 11h6"/>',chev:'<path d="m9 6 6 6-6 6"/>',chevD:'<path d="m6 9 6 6 6-6"/>',check:'<path d="m5 12.5 4.5 4.5L19 7.5"/>',alert:'<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5M12 16.2v.01"/>',x:'<path d="M6 6l12 12M18 6 6 18"/>',backI:'<path d="m15 5-7 7 7 7"/>',backA:'<path d="M20 12H5M11 6l-6 6 6 6"/>',refresh:'<path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/>',logout:'<path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="m15 16 4-4-4-4"/><path d="M19 12H9"/>',search:'<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4-4"/>',house:'<path d="M4 10.5 12 4l8 6.5V20H4z"/><path d="M10 20v-5h4v5"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/>',users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.8"/><path d="M16 14.2a5.5 5.5 0 0 1 6 5.8"/>'};
+const ic=(n)=>`<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${P[n]}</svg>`;
+/* ======================= dữ liệu & trạng thái ======================= */
+const COLORS={G:'#2563eb',M:'#7c3aed',P:'#16a34a',C:'#0f766e',Đ:'#db2777',A:'#ea580c',S:'#0891b2',K:'#4f46e5'};
+const col=n=>COLORS[(n||'?').trim().charAt(0).toUpperCase()]||'#475569';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const len=s=>Array.from(s||'').length;
+const USER={name:'Chình',email:'chinh.tt@gmail.com'};
+const INV=[{id:'i1',ws:'Marketing Team',by:'Trà Nguyễn',pos:'Nhân viên kinh doanh',members:5},{id:'i2',ws:'Product Team',by:'Chiến Lê',pos:'Chuyên viên sản phẩm',members:8}];
+const WM1={id:'w1',name:'Gopany',role:'member',members:12,last:'Hôm nay 08:15'},WM2={id:'w2',name:'Sales Hub',role:'member',members:6,last:'Hôm qua 17:42'};
+const GROUPS={
+  create:{label:'US1 · Tạo workspace',desc:'3 trường hợp có nút Tạo workspace (US1). Bấm Tạo để đi tiếp: nhập tên (Android chọn mô hình trước) → tạo xong vào thẳng Trợ lý Goni.',
+    scen:{th1:{label:'TH1 · Đăng ký → màn Bắt đầu',ws:[],inv:[]},
+          th2:{label:'TH2 · Mở màn danh sách workspace (chưa có Admin)',ws:[WM1],inv:[],after:'sheet'},
+          th3:{label:'TH3 · Đăng nhập, có 2 workspace, không có Admin',ws:[WM1,WM2],inv:[]}},
+    opts:[['failLoad','Tải lỗi lần đầu'],['failCreate','Tạo lỗi lần đầu'],['failOpen','Mở workspace lỗi']]},
+  invite:{label:'US2 · Lời mời',desc:'US2 · Danh sách lời mời, không có popup: màn Chọn workspace (đăng nhập có từ 2 workspace) và danh sách workspace trong app (bấm tên workspace có badge). Chưa có workspace thì không hiển thị lời mời.',
+    scen:{i1:{label:'Có 2 workspace · 2 lời mời → màn Chọn workspace',ws:[WM1,WM2],inv:INV},
+          i2:{label:'Có 1 workspace · 2 lời mời → badge + danh sách workspace',ws:[WM1],inv:INV},
+          i3:{label:'Có 2 workspace · không có lời mời',ws:[WM1,WM2],inv:[]}},
+    opts:[['failLoad','Tải lỗi lần đầu'],['full','Chấp nhận → đủ thành viên'],['expired','Chấp nhận → hết hiệu lực']]}
+};
+let TAB='create';
+function base(o){return Object.assign({p:'ios',screen:'start',ws:[],inv:[],cur:null,invState:'ok',busy:null,
+  create:{name:'',status:'idle'},q:'',invite:{chips:[],input:'',inputErr:'',status:'idle',banner:'',from:'create'},
+  sheet:null,dialog:null,toast:null,hl:false,noJoin:true},JSON.parse(JSON.stringify(o||{})))}
+const isAdminAny=s=>s.ws.some(w=>w.role==='admin');
+const curWs=s=>s.ws.find(w=>w.id===s.cur);
+
+/* ======================= khung điện thoại ======================= */
+function statusBar(s){return `<div class="sb"><span>${s.p==='ios'?'9:41':'9:41'}</span><span class="island"></span><span class="sbi">${s.p==='ios'?'5G':'LTE'} <span class="bat"></span></span></div>`}
+function nav(s,title,o={}){
+  const back=o.back?`<button class="l" data-act="${o.back}" aria-label="Quay lại">${s.p==='ios'?ic('backI'):ic('backA')}</button>`:'<span></span>';
+  const right=o.right?`<button class="r" data-act="${o.rightAct}" ${o.rightDis?'disabled style="opacity:.4"':''}>${o.right}</button>`:'<span></span>';
+  return `<div class="nav">${back}<div class="t">${esc(title)}</div>${right}</div>`;
+}
+function phone(s){
+  const body=SCREENS[s.screen](s);
+  const tab=s.screen==='home';
+  let ov='';
+  if(s.sheet==='switcher') ov+=`<div class="dim" data-act="closeSheet"></div>`+switcher(s);
+  if(s.dialog) ov+=`<div class="dim"></div>`+dialog(s);
+  if(s.toast) ov+=toast(s);
+  const soft=s.screen!=='home';
+  return `<div class="ph ${s.p}">${statusBar(s)}<div class="scr ${tab?'withtab':''} ${soft?'soft':''}" id="scr">${body}</div>${canFab(s)?`<button class="fab" data-act="goCreate" aria-label="Tạo workspace">${ic('plus')}</button>`:''}${ov}<div class="hi"></div></div>`;
+}
+function toast(s){const t=s.toast;return `<div class="toast"><span>${s.p==='ios'?'<span class="okic">'+ic('check')+'</span>':''}${esc(t.text)}</span>${t.act?`<button data-act="${t.act}">${esc(t.actLabel)}</button>`:''}</div>`}
+function dialog(s){const d=s.dialog;
+  return `<div class="dlg ${d.list?'list':''}" role="dialog">${s.p==='ios'?'<div class="c">':''}${d.meta?`<div class="dmeta">${esc(d.meta)}</div>`:''}<h3>${esc(d.title)}</h3>${d.body?`<p>${esc(d.body)}</p>`:''}${s.p==='ios'?'</div>':''}
+  <div class="bs">${d.btns.map(b=>`<button class="${b.kind||''}" data-act="${b.act}" ${d.busy?'disabled':''}>${esc(b.label)}</button>`).join('')}</div></div>`}
+function invDialog(i,n){return {meta:n>1?`Lời mời 1/${n}`:'',title:`Tham gia ${i.ws}?`,body:`${i.by} mời bạn tham gia workspace ${i.ws}${i.pos?` với chức vụ ${i.pos}`:''}. Khi tham gia, bạn sẽ được chuyển sang workspace này.`,btns:[{label:'Từ chối',act:`popDecline:${i.id}`},{label:'Tham gia',act:`accept:${i.id}:popup`,kind:'strong'}]}}
+const NOT_AVAIL={title:'Trang này không khả dụng.',body:'Bạn không có quyền truy cập vào không gian làm việc này hoặc không gian làm việc này không còn tồn tại',btns:[{label:'Đã hiểu',act:'closeDlg',kind:'strong'}]};
+const FULL={title:'Workspace này đã đủ thành viên.',btns:[{label:'Đã hiểu',act:'closeDlg',kind:'strong'}]};
+const WRONG=i=>({title:'Lời mời gửi tới email khác',body:`Bạn đang đăng nhập bằng tài khoản email ${USER.email}, lời mời tham gia workspace được gửi tới email trang.nguyen@gopany.com, được mời bởi ${i.by}.`,btns:[{label:'Ở lại',act:'closeDlg'},{label:'Đăng nhập với email này',act:'logout',kind:'strong'}]});
+
+/* ======================= thành phần ======================= */
+function topbar(s,o={}){return `<div class="tb"><div class="brand2"><i>G</i>Gopany</div>${o.noLogout?'':`<button class="logout" data-act="logout">${ic('logout')}Đăng xuất</button>`}</div>`}
+function backrow(s,act,right){return `<div class="bkrow"><button class="bk" data-act="${act}" aria-label="Quay lại">${s.p==='ios'?ic('backI'):ic('backA')}</button>${right||''}</div>`}
+const roleTag=w=>`<span class="rtag ${w.role==='admin'?'ad':''}">${w.role==='admin'?'Quản trị viên':'Thành viên'}</span>`;
+function wsCard(w,act){return `<button class="wcard" data-act="${act}"><div class="avc" style="background:${col(w.name)}">${esc(w.name[0])}</div><div style="min-width:0">${roleTag(w)}<div class="nm">${esc(w.name)}</div><div class="lt ${w.last?'':'new'}">${esc(w.last||'Chưa truy cập lần nào')}</div></div><span class="chev">${ic('chev')}</span></button>`}
+function invItem(s,i,from){
+  const b=s.busy&&s.busy.id===i.id?s.busy.a:null;
+  return `<div class="icard"><div class="top"><div class="avc" style="background:${col(i.ws)}">${esc(i.ws[0])}</div><div style="min-width:0"><div class="nm">${esc(i.ws)}</div><div class="pos">${esc(i.pos||'')}</div><div class="by">Mời bởi ${esc(i.by)}</div></div><span class="wait">Đang chờ</span></div>
+  <div class="two"><button class="btn sm" data-act="decline:${i.id}:${from}" ${b?'disabled':''}>${b==='decline'?'<span class="spin"></span>':''}Từ chối</button>
+  <button class="btn sm pri" data-act="accept:${i.id}:${from}" ${b?'disabled':''}>${b==='accept'?'<span class="spin"></span><span style="white-space:nowrap;font-size:13px">Đang xử lý</span>':'Chấp nhận'}</button></div></div>`;
+}
+function invList(s,from){
+  if(s.invState==='loading') return [1,2].map(()=>`<div class="icard"><div class="top"><div class="avc skv"></div><div style="flex:1"><div class="sk a"></div><div class="sk b"></div></div></div></div>`).join('');
+  if(s.invState==='error') return `<div class="ecard empty"><span class="big">${ic('cloud')}</span><b>Chưa thể tải lời mời.</b><br>Vui lòng thử lại.<div style="margin-top:12px"><button class="btn sm pri" data-act="reloadInv">Thử lại</button></div></div>`;
+  if(!s.inv.length) return from==='join'
+     ?`<div class="ecard empty"><span class="big">${ic('mail')}</span><b>Bạn chưa có lời mời nào.</b><br>Mở email mời và bấm link tham gia, hoặc nhờ quản trị viên gửi lời mời đến <b>${esc(USER.email)}</b>.<div style="margin-top:12px"><button class="btn sm" data-act="reloadInv">Tải lại</button></div></div>`
+     :`<div class="ecard empty">Bạn không có lời mời đang chờ.</div>`;
+  return s.inv.map(i=>invItem(s,i,from)).join('');
+}
+function invSection(s,from){return `<div class="lab">Lời mời tham gia${s.invState==='ok'?` (${s.inv.length})`:''}</div>${invList(s,from)}`}
+const canFab=s=>s.screen==='choose'&&!isAdminAny(s);
+
+/* ======================= các màn ======================= */
+const SCREENS={
+ loading:s=>`<div class="center"><div class="logo" style="background:#1d2433;box-shadow:none">G</div><span class="spin big"></span><div class="muted">Đang tải workspace…</div></div>`,
+ loadError:s=>`<div class="center"><div class="bigic">${ic('cloud')}</div><b style="font-size:18px">Chưa thể tải dữ liệu</b><div class="muted">Kiểm tra kết nối và thử lại.</div><button class="btn pri" data-act="retryLoad" style="margin-top:8px">Thử lại</button><button class="btn ghost" data-act="logout">Đăng xuất</button></div>`,
+ login:s=>`<div class="center"><div class="logo">G</div><b>Màn đăng nhập</b><div class="muted small">Thuộc Epic SĐT/OTP – ngoài phạm vi wireframe này.</div><button class="btn pri" data-act="restart">Đăng nhập lại</button></div>`,
+ start:s=>{
+   const n=s.invState==='ok'?s.inv.length:0;
+   return `${topbar(s)}<div class="body"><div class="h">Chào ${esc(USER.name)}!</div>
+   <p class="sub">${s.noJoin?'Bạn chưa ở trong workspace nào. Tạo workspace mới để bắt đầu làm việc cùng nhóm.':'Bạn chưa ở trong workspace nào. Tạo workspace mới hoặc tham gia workspace của đồng đội.'}</p>
+   <p class="who">Đang đăng nhập: <b>${esc(USER.email)}</b></p>
+   ${isAdminAny(s)?'':`<button class="opt" data-act="goCreate"><span class="ot blue">${ic('plus')}</span><div><b>Tạo workspace</b><small>Tạo không gian làm việc cho nhóm của bạn</small></div><span class="chev">${ic('chev')}</span></button>`}
+   ${s.noJoin?'':`<button class="opt" data-act="goJoin"><span class="ot">${ic('join')}</span><div><b>Tham gia workspace${n?`<span class="badge">${n}</span>`:''}</b><small>Chấp nhận lời mời từ đồng đội</small></div><span class="chev">${ic('chev')}</span></button>`}
+   </div>`},
+ join:s=>`${topbar(s)}${backrow(s,'backFromJoin')}<div class="body"><div class="h">Lời mời tham gia</div><p class="sub">Chấp nhận lời mời từ đồng đội để tham gia workspace của họ.</p>${invList(s,'join')}</div>`,
+ choose:s=>{
+   const q=(s.q||'').trim().toLowerCase(), list=s.ws.filter(w=>!q||w.name.toLowerCase().includes(q));
+   const showInv=s.invState!=='ok'||s.inv.length;
+   return `${topbar(s)}<div class="body"><div class="h">Workspace của bạn</div><p class="sub">Chọn workspace để tiếp tục làm việc</p>
+   <label class="search">${ic('search')}<input id="wsq" data-bind="q" placeholder="Tìm kiếm workspace" value="${esc(s.q||'')}" autocomplete="off"></label>
+   ${showInv?invSection(s,'choose'):''}
+   <div class="lab">Workspace (${s.ws.length})</div>
+   ${list.length?list.map(w=>wsCard(w,'open:'+w.id)).join(''):`<div class="ecard empty">Không tìm thấy workspace phù hợp.</div>`}
+   </div>`},
+ model:s=>{const inApp=S&&S.prev==='home'&&s===S;
+   const M=[['user','Cá nhân','Quản lý công việc của riêng bạn'],['users','Đội nhóm','Cộng tác cùng nhóm nhỏ'],['house','Doanh nghiệp','Vận hành toàn bộ tổ chức']];
+   return `${topbar(s,{noLogout:inApp})}${backrow(s,'backFromModel')}<div class="body"><div class="h">Mô hình workspace của bạn là gì?</div><p class="sub">Chỉ dùng để phân loại, không ảnh hưởng tính năng.</p>
+   ${M.map(([i,t,d])=>`<button class="opt" data-act="pickModel:${t}"><span class="ot">${ic(i)}</span><div><b>${t}</b><small>${d}</small></div><span class="chev">${ic('chev')}</span></button>`).join('')}
+   <p class="sub" style="text-align:center;font-size:12px;margin-top:6px">Chạm để chọn</p></div>`},
+ create:s=>{
+   const c=s.create, L=len(c.name), t=c.name.trim(), over=L>100, busy=c.status==='creating', opened=c.status==='openError';
+   const dis=busy||opened||!t.length||over, inApp=S&&S.prev==='home'&&s===S;
+   return `${topbar(s,{noLogout:inApp})}${busy||opened?'<div style="height:42px"></div>':backrow(s,s.p==='android'?'backToModel':'backFromCreate')}<div class="body">
+   <div class="h">Tên workspace của bạn</div><p class="sub">Bạn có thể đổi tên sau.</p>
+   <label class="ifield ${over?'bad':''} ${busy||opened?'dis':''}">${ic('house')}<input id="wsname" data-bind="name" placeholder="Ví dụ: Nhóm thiết kế Gopany" value="${esc(c.name)}" ${busy||opened?'disabled':''} autocomplete="off" aria-label="Tên workspace"></label>
+   <div class="meta"><span class="e">${over?'Tên workspace không được vượt quá 100 ký tự':''}</span><span class="cnt ${over?'over':''}">${L}/100</span></div>
+   ${c.status==='error'?`<div class="banner err">${ic('alert')}Chưa thể tạo workspace. Vui lòng thử lại.</div>`:''}
+   ${opened?`<div class="banner warn">${ic('alert')}Workspace đã được tạo nhưng chưa thể mở. Vui lòng thử lại.</div><button class="btn pri mt" data-act="retryOpen">Thử mở lại</button>${s.ws.length>1?'<button class="btn mt" style="margin-top:10px" data-act="chooseOther">Chọn workspace khác</button>':''}<div class="meta" style="justify-content:center">Không tạo workspace lần nữa</div>`
+   :`<button class="btn pri mt" data-act="doCreate" ${dis?'disabled':''}>${busy?'<span class="spin"></span> Đang tạo…':c.status==='error'?'Thử lại':'Tạo workspace'}</button>`}
+   </div>`},
+ invite:s=>{
+   const v=s.invite, busy=v.status==='sending', fromC=v.from==='create', w=curWs(s)||{name:'Workspace'};
+   const okChips=v.chips.length;
+   const left=fromC?(s.p==='android'?`<button class="bk" data-act="skipInvite" aria-label="Quay lại">${ic('backA')}</button>`:'<span></span>'):`<button class="bk" data-act="closeInvite" aria-label="Quay lại">${s.p==='ios'?ic('backI'):ic('backA')}</button>`;
+   return `<div class="bkrow" style="min-height:48px">${left}${fromC?`<button class="skip" data-act="skipInvite" ${busy?'disabled':''}>Bỏ qua</button>`:''}</div><div class="body">
+   ${fromC?`<div class="banner ok" style="margin-top:0">${ic('check')}Workspace <b>${esc(w.name)}</b> đã sẵn sàng.</div>`:''}
+   <div class="h" style="margin-top:14px">Mời thành viên</div>
+   <p class="sub">Mời đồng đội để cùng làm việc. Họ sẽ nhận email có link tham gia.</p>
+   <label class="f" for="em">Email</label>
+   <div class="chipbox ${v.inputErr?'bad':''}">${v.chips.map((c,i)=>`<span class="chip ${c.err?'err':''}"><span>${esc(c.email)}${c.err?`<small>${esc(c.err)}</small>`:''}</span>${busy?'':`<button data-act="rmChip:${i}" aria-label="Xoá">${ic('x')}</button>`}</span>`).join('')}
+   <input id="em" data-bind="email" placeholder="${v.chips.length?'':'ten@congty.com'}" value="${esc(v.input)}" ${busy?'disabled':''} inputmode="email" autocomplete="off"></div>
+   <div class="meta"><span class="e">${esc(v.inputErr)}</span><span>${v.chips.length}/10</span></div>
+   ${v.banner?`<div class="banner ${v.status==='partial'?'warn':'err'}">${ic('alert')}${esc(v.banner)}</div>`:''}
+   <button class="btn pri mt" data-act="sendInvite" ${busy||!okChips?'disabled':''}>${busy?'<span class="spin"></span> Đang gửi…':v.status==='error'?'Thử lại':`Gửi lời mời${okChips?` (${okChips})`:''}`}</button>
+   ${s.p==='android'&&fromC?`<div class="meta" style="justify-content:center">Nút Back hệ thống = Bỏ qua</div>`:''}
+   </div>`},
+ home:s=>{const w=curWs(s)||{name:'—',role:'member'};const n=s.inv.length;
+   return `<div class="apphd"><button class="wsbtn" data-act="openSheet"><div class="av" style="background:${col(w.name)};width:34px;height:34px">${esc(w.name[0])}</div><div style="min-width:0"><div class="n">${esc(w.name)} ${ic('chevD')}${n?`<span class="badge">${n}</span>`:''}</div><span class="tag ${w.role==='admin'?'ad':''}">${w.role==='admin'?'Quản trị viên':'Thành viên'}</span></div></button>
+   <div class="av" style="background:#1f5bd8;width:34px;height:34px;border-radius:50%">C</div></div>
+   <div class="goni"><div class="spark">${ic('spark')}</div><h2>Xin chào, ${esc(USER.name)}!<br>Tôi là trợ lý Goni</h2><div class="muted">Tôi có thể giúp gì cho bạn hôm nay?</div>
+   <div class="sug"><span>Tìm thông tin</span><span>Xem công việc</span><span>Hỗ trợ sử dụng</span></div></div>
+   <div class="ask">Nhập tin nhắn…</div>
+   <div class="tabs"><div class="on"><b>${ic('home')}</b>Trang chủ</div><div><b>${ic('task')}</b>Công việc</div><div><b>${ic('chat')}</b>Tin nhắn</div><div><b>${ic('bell')}</b>Thông báo</div></div>`}
+};
+function switcher(s){const w=curWs(s)||{};
+  return `<div class="drop"><div class="sec">Workspace của bạn</div>
+  ${s.ws.map(x=>`<button class="wsi ${x.id===s.cur?'cur':''}" data-act="switch:${x.id}"><div class="av" style="background:${col(x.name)}">${esc(x.name[0])}</div><div>${roleTag(x)}<div style="font-weight:600;margin-top:3px">${esc(x.name)}</div><span class="meta2">${esc(x.last||'Chưa truy cập lần nào')}</span></div>${x.id===s.cur?'<span class="ck">'+ic('check')+'</span>':''}</button>`).join('')}
+  ${isAdminAny(s)?'':`<button class="act" data-act="goCreate"><span class="pl">${ic('plus')}</span>Tạo workspace</button>`}
+  
+  ${s.inv.length||s.invState!=='ok'?`<div style="border-top:1px solid var(--line)"></div><div style="padding:0 16px 8px">${invSection(s,'switcher')}</div>`:''}</div>`}
+
+/* ======================= ghi chú theo màn ======================= */
+const NOTES={
+ loading:['Màn chung','Chỉ quyết định điểm vào khi đã tải xong workspace + lời mời. Không hiện màn Bắt đầu thoáng qua.'],
+ loadError:['Màn chung','Lỗi tải không bị coi là "chưa có workspace". Có Thử lại và Đăng xuất.'],
+ start:['US1 · AC1 (TH1 đăng ký)','Chỉ có thẻ Tạo workspace (thẻ ẩn khi đã có workspace Admin). Không có thẻ Tham gia và không hiển thị lời mời – người chưa có workspace tham gia bằng link trong email (US2 · Open Question 1). Luôn có Đăng xuất để đổi tài khoản.'],
+ join:['US3 · AC2–AC3, AC12, AC14–AC17','Mở từ thẻ Tham gia trên màn Bắt đầu. Danh sách lời mời mới nhất trước; Chấp nhận thì vào thẳng workspace đó; Từ chối có hộp xác nhận. Không có lời mời thì hướng dẫn mở link trong email.'],
+ choose:['US2 · AC1–AC2, AC5, AC7–AC9, AC11–AC14; US1 · AC3 (TH3)','Đăng nhập có từ 2 workspace. Có ô tìm kiếm (thử gõ "sales"), mục Lời mời tham gia (n) phía trên danh sách workspace khi có lời mời (không có thì ẩn), thẻ workspace kèm lần truy cập gần nhất. Không có workspace nào vai trò Admin thì có nút + nổi để tạo (TH3, quyết định PM 29/10, khác web US-WS-03).'],
+ create:['US1 · AC4–AC14','Màn nhập tên. iOS: vào thẳng màn này. Android: qua bước chọn mô hình trước (BR5), nút quay lại về màn chọn mô hình. Tạo thành công thì vào thẳng Trợ lý Goni của workspace vừa tạo (không có bước mời thành viên). Bật "Tạo lỗi lần đầu" / "Mở workspace lỗi" để xem trạng thái lỗi.'],
+ model:['US1 · BR5, AC4','Chỉ có trên Android: chọn Cá nhân / Đội nhóm / Doanh nghiệp rồi sang màn nhập tên. iOS không có bước này (Apple 3.1.1). Lựa chọn không ảnh hưởng tính năng, quyền hay giới hạn (anh Chiến).'],
+ invite:['US2 · AC1–AC16; web A27','Bỏ qua luôn bấm được (trừ lúc đang gửi). Nhập email rồi Enter hoặc dấu phẩy để thêm. Mỗi email được gán chức vụ mặc định (A27), không hiển thị trên màn. Khi bật "Gửi mời lỗi một phần": email chứa "x@" báo "Đã là thành viên", email chứa "moi" báo "Email này đã được mời".'],
+ home:['US2 · AC3–AC4, AC6, AC10; US1 · AC2 (TH2)','Trợ lý Goni là màn chào mừng (minh hoạ). Có lời mời thì tên workspace có badge, không bật popup. Bấm tên workspace để mở danh sách: chuyển workspace (có xác nhận), + Tạo, mục Lời mời tham gia.'],
+ login:['Ngoài phạm vi','Bấm Đăng nhập lại để chạy lại tình huống.']
+};
+
+/* ======================= chế độ bấm thử ======================= */
+let S, OPT={failLoad:false,failCreate:false,failOpen:false,partial:false,full:false,expired:false}, once={};
+function startScenario(){
+  const sc=GROUPS[TAB].scen[document.getElementById('scn').value];once={};
+  S=base({p:PLAT,ws:sc.ws,inv:sc.inv,screen:'loading',after:sc.after||null});
+  draw();setTimeout(()=>{ if(OPT.failLoad&&!once.load){once.load=1;S.screen='loadError';draw();} else route(); },800);
+}
+function route(toast){S.sheet=null;S.dialog=null;S.invState='ok';
+  if(S.ws.length===0)S.screen='start';
+  else if(S.ws.length===1){S.cur=S.ws[0].id;S.screen='home';}
+  else S.screen='choose';
+  if(S.after==='sheet'&&S.screen==='home'){S.sheet='switcher';S.after=null}
+  if(toast)flash(toast);draw();}
+function flash(t){S.toast=t;draw();clearTimeout(flash.t);flash.t=setTimeout(()=>{S.toast=null;draw();},t.act?5000:2600);}
+function wait(ms,f){setTimeout(()=>{f();draw();},ms)}
+function addChip(raw){const v=S.invite;const e=raw.trim().toLowerCase().replace(/,$/,'');if(!e)return;
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)){v.inputErr='Email không hợp lệ.';return}
+  if(e===USER.email){v.inputErr='Bạn đã là thành viên của workspace này.';return}
+  if(v.chips.some(c=>c.email===e)){v.inputErr='Email này đã có trong danh sách.';return}
+  if(v.chips.length>=10){v.inputErr='Mỗi lần mời tối đa 10 email.';return}
+  v.chips.push({email:e});v.input='';v.inputErr='';}
+function act(a){
+  const [k,x,y]=a.split(':');
+  const H={
+   restart:startScenario, retryLoad:()=>{S.screen='loading';draw();wait(700,route)},
+   logout:()=>{S.screen='login';S.sheet=null;S.dialog=null;draw()},
+   goCreate:()=>{S.sheet=null;S.create={name:'',status:'idle'};S.prev=S.screen;if(S.p==='android'){S.screen='model';draw();return}S.screen='create';draw();setTimeout(()=>{const i=document.getElementById('wsname');i&&i.focus()},30)},
+   pickModel:()=>{S.create.model=x;S.screen='create';draw();setTimeout(()=>{const i=document.getElementById('wsname');i&&i.focus()},30)},
+   backFromModel:()=>{S.screen=S.prev==='home'?'home':S.prev||'start';draw()},
+   backToModel:()=>{S.screen='model';draw()},
+   backFromCreate:()=>{S.screen=S.prev==='home'?'home':S.prev||'start';draw()},
+   goJoin:()=>{S.screen='join';S.invState='loading';draw();wait(600,()=>{S.invState='ok'})},
+   backFromJoin:()=>{S.screen='start';draw()},
+   reloadInv:()=>{S.invState='loading';draw();wait(700,()=>{S.invState='ok'})},
+   doCreate:()=>{S.create.status='creating';draw();wait(1000,()=>{
+      if(OPT.failCreate&&!once.create){once.create=1;S.create.status='error';return}
+      const w={id:'n'+Date.now(),name:S.create.name.trim(),role:'admin',members:1};S.ws.unshift(w);S.cur=w.id;
+      if(OPT.failOpen&&!once.open){once.open=1;S.create.status='openError';return}
+      S.screen='home';S.sheet=null;flash({text:`Đã tạo workspace ${w.name}`});})},
+   retryOpen:()=>{S.create.status='creating';draw();wait(700,()=>{const w=curWs(S);S.screen='home';flash({text:`Đã tạo workspace ${w.name}`})})},
+   skipInvite:()=>{if(S.invite.status==='sending')return;S.screen='home';draw()},
+   closeInvite:()=>{S.screen='home';draw()},
+   openInviteFromSwitcher:()=>{S.sheet=null;goInvite('switcher');draw()},
+   rmChip:()=>{S.invite.chips.splice(+x,1);draw()},
+   sendInvite:()=>{const v=S.invite;if(v.input.trim()){addChip(v.input);if(v.inputErr){draw();return}}
+      v.status='sending';v.banner='';draw();wait(1100,()=>{
+       if(OPT.partial){const bad=v.chips.filter(c=>/x@|moi/.test(c.email)||c.err);const good=v.chips.length-bad.length;
+         if(bad.length){bad.forEach(c=>c.err=c.err||(c.email.includes('moi')?'Email này đã được mời':'Đã là thành viên'));v.chips=bad;v.status='partial';v.banner=`Đã gửi ${good} lời mời. ${bad.length} email chưa gửi được.`;return}}
+       if(OPT.failCreate&&!once.send){once.send=1;v.status='error';v.banner='Chưa thể gửi lời mời. Vui lòng thử lại.';return}
+       const n=v.chips.length;S.screen='home';flash({text:`Đã gửi lời mời đến ${n} người`});})},
+   openSheet:()=>{S.sheet='switcher';draw()}, closeSheet:()=>{S.sheet=null;draw()},
+   switch:()=>{S.sheet=null;if(x===S.cur){draw();return}const w=S.ws.find(z=>z.id===x);S.dialog={title:`Chuyển sang ${w.name}?`,body:'Dữ liệu chưa lưu ở workspace hiện tại sẽ không được giữ lại.',btns:[{label:'Huỷ',act:'closeDlg'},{label:'Chuyển',act:`doSwitch:${x}`,kind:'strong'}]};draw()}, doSwitch:()=>{S.dialog=null;S.cur=x;S.screen='home';draw()}, chooseOther:()=>{S.screen='choose';draw()}, pickRole:()=>{S.dialog={list:true,title:'Chức vụ cho lời mời',body:'Mỗi email được gán 1 chức vụ.',btns:['Nhân viên','Trưởng nhóm','Kế toán'].map(r=>({label:r,act:`setRole:${r}`})).concat([{label:'Huỷ',act:'closeDlg',kind:'strong'}])};draw()}, setRole:()=>{S.invite.role=x;S.dialog=null;draw()}, open:()=>{S.cur=x;S.screen='home';draw()},
+   accept:()=>{if(y==='popup')S.dialog.busy=true;else S.busy={id:x,a:'accept'};draw();wait(900,()=>{S.busy=null;S.dialog=null;const i=S.inv.find(z=>z.id===x);
+      if(OPT.wrong){S.dialog=WRONG(i);return}
+      if(OPT.full){S.dialog=FULL;return}
+      if(OPT.expired&&!once.exp){once.exp=1;S.inv=S.inv.filter(z=>z.id!==x);S.dialog=NOT_AVAIL;return}
+      S.inv=S.inv.filter(z=>z.id!==x);const w={id:'j'+x,name:i.ws,role:'member',members:i.members+1};S.ws.push(w);
+      S.cur=w.id;S.screen='home';S.sheet=null;flash({text:`Đã tham gia ${i.ws}`})})},
+   popDecline:()=>{S.dialog.busy=true;draw();wait(700,()=>{S.dialog=null;S.inv=S.inv.filter(z=>z.id!==x);flash({text:'Đã từ chối lời mời'});nextInv()})},
+   decline:()=>{const i=S.inv.find(z=>z.id===x);S.dialog={title:`Từ chối lời mời vào ${i.ws}?`,body:'Lời mời sẽ không còn hiệu lực.',btns:[{label:'Huỷ',act:'closeDlg'},{label:'Từ chối',act:`doDecline:${x}`,kind:'danger'}]};draw()},
+   doDecline:()=>{S.dialog=null;S.busy={id:x,a:'decline'};draw();wait(800,()=>{S.busy=null;S.inv=S.inv.filter(z=>z.id!==x);flash({text:'Đã từ chối lời mời'})})},
+   closeDlg:()=>{S.dialog=null;draw()},
+   open2:()=>{}
+  };
+  if(k==='open'&&S.toast){S.toast=null;}
+  (H[k]||(()=>{}))();
+}
+function goInvite(from){S.invite={chips:[],input:'',inputErr:'',status:'idle',banner:'',from};S.screen='invite';}
+const TITLES={loading:'Đang tải sau đăng nhập',loadError:'Lỗi tải dữ liệu',start:'Màn Bắt đầu',model:'Mô hình workspace (Android)',join:'Lời mời tham gia',choose:'Chọn workspace',create:'Tạo workspace',invite:'Mời thành viên',home:'Trong app · Trợ lý Goni',login:'Đăng nhập'};
+let PLAT='ios',lastKey='',lastScreen='';
+function draw(){
+  const f=document.activeElement, fid=f&&f.id, pos=f&&f.selectionStart;
+  const sc=document.getElementById('scr'), top=sc?sc.scrollTop:0;
+  const key=[S.sheet||'',S.dialog?S.dialog.title:'',S.toast?S.toast.text:''].join('|');
+  const moved=S.screen!==lastScreen;
+  const w=document.getElementById('phonewrap');w.innerHTML=phone(S);
+  const ph=w.firstElementChild;
+  if(key!==lastKey&&key!=='||')ph.classList.add('fresh');
+  if(moved&&lastScreen)ph.classList.add('moved');
+  lastKey=key;lastScreen=S.screen;
+  const sc2=document.getElementById('scr');if(sc2&&!moved)sc2.scrollTop=top;
+  const n=NOTES[S.screen]||['',''];
+  const refs=n[0].split(';').map(x=>x.trim()).filter(Boolean);
+  document.getElementById('notes').innerHTML=`<div class="eb">Màn hiện tại · ${S.p==='ios'?'iOS':'Android'}</div><h2>${esc(TITLES[S.screen]||S.screen)}</h2>
+   <div class="refs">${refs.map(r=>`<span class="ref">${esc(r)}</span>`).join('')}</div><p>${esc(n[1])}</p>
+   <div class="rule"><b>Quy tắc iOS 3.1.1</b><br>Không hiển thị gói, giá, “Nâng cấp”, link thanh toán hay hướng dẫn lên web mua ở bất kỳ màn nào. Android dùng chung bản này (chờ PM chốt Q8).</div>
+   <div class="boards"><div class="eb">Bảng màn hình theo US</div><nav>${[['us1','US1 Tạo workspace'],['us2','US2 Danh sách lời mời']].map(([k,l])=>`<a href="#board-${k}">${l}</a>`).join('')}</nav></div>`;
+  document.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.p===S.p)));
+  if(fid){const e=document.getElementById(fid);if(e&&!e.disabled){e.focus();try{e.setSelectionRange(pos,pos)}catch(_){}}}
+}
+function renderCtrl(){
+  const g=GROUPS[TAB];
+  document.getElementById('ctrl').innerHTML=`<div class="tabbar" role="tablist" aria-label="Nhóm demo">${Object.entries(GROUPS).map(([k,v])=>`<button type="button" role="tab" id="tab-${k}" data-tab="${k}" aria-selected="${k===TAB}">${v.label}<span class="cnt">${Object.keys(v.scen).length}</span></button>`).join('')}</div>
+    <p class="tabdesc">${esc(g.desc)}</p>
+    <span class="lb">Nền tảng</span><div class="seg" role="group" aria-label="Nền tảng"><button type="button" id="p-ios" data-p="ios" aria-pressed="${PLAT==='ios'}">iOS</button><button type="button" id="p-android" data-p="android" aria-pressed="${PLAT==='android'}">Android</button></div>
+    <label class="lb" for="scn">Tình huống</label><div class="row2"><span class="sel"><select id="scn">${Object.entries(g.scen).map(([k,v])=>`<option value="${k}">${v.label}</option>`).join('')}</select></span>
+     <div class="acts"><button type="button" class="cbtn" data-act="restart">${ic('refresh')}Chạy lại</button>${g.sim?`<button type="button" class="cbtn" id="simAdd">${ic('userplus')}Admin thêm bạn rồi quay lại app</button>`:''}</div></div>
+    <span class="lb">Giả lập</span><div class="chips">${g.opts.map(([k,l])=>`<label class="tgl"><input type="checkbox" id="opt-${k}" data-opt="${k}"><span class="bx">${ic('check')}</span>${l}</label>`).join('')}</div>`;
+  document.querySelectorAll('.tabbar button').forEach(b=>b.onclick=()=>{if(b.dataset.tab===TAB)return;TAB=b.dataset.tab;Object.keys(OPT).forEach(k=>OPT[k]=false);renderCtrl();startScenario();});
+  document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{PLAT=b.dataset.p;S.p=PLAT;draw()});
+  document.getElementById('scn').onchange=startScenario;
+  document.querySelectorAll('[data-opt]').forEach(c=>{c.checked=!!OPT[c.dataset.opt];c.onchange=()=>{OPT[c.dataset.opt]=c.checked}});
+  const sim=document.getElementById('simAdd');
+  if(sim)sim.onclick=()=>{if(!S.ws.some(w=>w.id==='wa'))S.ws.push({id:'wa',name:'Kho Vận Miền Nam',role:'member',members:20});S.screen='loading';draw();wait(700,route)};
+}
+function interactive(){
+  document.getElementById('app').innerHTML=`<div class="wrap">
+   <header class="top"><div class="brand"><div class="mark">G</div><div><h1>Wireframe Workspace</h1><p>Gopany · iOS &amp; Android · Bản đề xuất 29/10/2026 · US1 Tạo workspace · US2 Danh sách lời mời</p></div></div><span class="stamp">Wireframe · dữ liệu mô phỏng</span></header>
+   <section class="ctrl" id="ctrl" aria-label="Điều khiển wireframe"></section>
+   <div class="stage"><div id="phonewrap"></div><aside class="notes" id="notes" aria-live="polite"></aside></div></div>`;
+  renderCtrl();
+  document.addEventListener('click',e=>{const t=e.target.closest('[data-act]');if(!t||t.disabled)return;e.preventDefault();act(t.dataset.act)});
+  document.addEventListener('input',e=>{const b=e.target.dataset.bind;if(!b)return;
+    if(b==='q'){S.q=e.target.value;draw();return}
+    if(b==='name'){S.create.name=e.target.value;if(S.create.status==='error')S.create.status='idle';draw()}
+    if(b==='email'){const v=e.target.value;if(v.endsWith(',')){addChip(v)}else{S.invite.input=v;S.invite.inputErr=''}draw()}});
+  document.addEventListener('keydown',e=>{if(e.target.dataset.bind==='email'&&e.key==='Enter'){e.preventDefault();addChip(e.target.value);draw()}
+    if(e.target.dataset.bind==='email'&&e.key==='Backspace'&&!e.target.value&&S.invite.chips.length){S.invite.chips.pop();draw()}
+    if(e.target.dataset.bind==='name'&&e.key==='Enter'){const b=document.querySelector('[data-act="doCreate"]');b&&!b.disabled&&act('doCreate')}});
+  startScenario();
+}
+/* ======================= chế độ bảng (xuất ảnh cho tài liệu) ======================= */
+const LONG='Đây là một cái tên workspace rất dài vượt quá giới hạn cho phép của hệ thống nên sẽ hiện thông báo lỗi để người dùng sửa lại';
+const W1={id:'w1',name:'Gopany',role:'member',members:12,last:'Hôm nay 08:15'},WA={id:'w3',name:'Đội ngũ Marketing',role:'admin',members:1};
+const BOARDS={
+ us1:{t:'US1 — Tạo workspace',st:'iOS & Android · Bản đề xuất 29/10/2026',foot:'Nút Tạo workspace ở 3 trường hợp: TH1 đăng ký; TH2 mở màn danh sách workspace khi không có workspace Admin; TH3 đăng nhập có từ 2 workspace mà không có vai trò Admin. Android có bước chọn mô hình trước màn nhập tên; iOS không có. Tạo xong vào thẳng Trợ lý Goni.',items:[
+  ['TH1 · Đăng ký → màn Bắt đầu',{screen:'start',noJoin:true}],
+  ['TH2 · Mở màn danh sách workspace',{screen:'home',ws:[W1,{id:'w2',name:'Sales Hub',role:'member',members:6,last:'Hôm qua 17:42'}],cur:'w1',sheet:'switcher'}],
+  ['TH3 · Đăng nhập ≥ 2, không Admin',{screen:'choose',ws:[W1,{id:'w2',name:'Sales Hub',role:'member',members:6,last:'Hôm qua 17:42'}]}],
+  ['Android · Chọn mô hình workspace',{p:'android',screen:'model'}],
+  ['Nhập tên (trống → nút disable)',{screen:'create'}],
+  ['Đang tạo',{screen:'create',create:{name:'Đội ngũ Marketing',status:'creating'}}],
+  ['Tên vượt 100 ký tự',{screen:'create',create:{name:LONG,status:'idle'}}],
+  ['Lỗi tạo',{screen:'create',create:{name:'Đội ngũ Marketing',status:'error'}}],
+  ['Đã tạo nhưng chưa mở được',{screen:'create',ws:[WA,W1],cur:'w3',create:{name:'Đội ngũ Marketing',status:'openError'}}],
+  ['Tạo xong → vào Trợ lý Goni',{screen:'home',ws:[WA],cur:'w3',toast:{text:'Đã tạo workspace Đội ngũ Marketing'}}]]},
+ us2:{t:'US2 — Hiển thị danh sách lời mời',st:'iOS & Android · Bản đề xuất 29/10/2026 · theo logic web Workspace ver 2.1',foot:'Không có popup lời mời. Lời mời chỉ hiển thị ở màn Chọn workspace và danh sách workspace trong app (badge trên tên workspace). Chưa có workspace thì không hiển thị lời mời – tham gia bằng link trong email. Thông báo lấy từ logic web; không gợi ý nâng cấp.',items:[
+  ['Chọn workspace · 2 lời mời',{screen:'choose',ws:[W1,{id:'w2',name:'Sales Hub',role:'member',members:6,last:'Hôm qua 17:42'}],inv:INV}],
+  ['Chọn workspace · không có lời mời',{screen:'choose',ws:[W1,{id:'w2',name:'Sales Hub',role:'member',members:6,last:'Hôm qua 17:42'}]}],
+  ['Chọn workspace · đang tải lời mời',{screen:'choose',ws:[W1,{id:'w2',name:'Sales Hub',role:'member',members:6,last:'Hôm qua 17:42'}],invState:'loading'}],
+  ['Chọn workspace · lỗi tải lời mời',{screen:'choose',ws:[W1,{id:'w2',name:'Sales Hub',role:'member',members:6,last:'Hôm qua 17:42'}],invState:'error'}],
+  ['Trong app · badge trên tên workspace',{screen:'home',ws:[W1],cur:'w1',inv:INV}],
+  ['Trong app · danh sách + lời mời',{screen:'home',ws:[W1],cur:'w1',inv:INV,sheet:'switcher'}],
+  ['Đang xử lý chấp nhận',{screen:'choose',ws:[W1,{id:'w2',name:'Sales Hub',role:'member',members:6,last:'Hôm qua 17:42'}],inv:INV,busy:{id:'i1',a:'accept'}}],
+  ['Xác nhận từ chối',{screen:'choose',ws:[W1,{id:'w2',name:'Sales Hub',role:'member',members:6,last:'Hôm qua 17:42'}],inv:INV,dialog:{title:'Từ chối lời mời vào Marketing Team?',body:'Lời mời sẽ không còn hiệu lực.',btns:[{label:'Huỷ',act:'x'},{label:'Từ chối',act:'x',kind:'danger'}]}}],
+  ['Chấp nhận → vào workspace B',{screen:'home',ws:[W1,{id:'w9',name:'Marketing Team',role:'member',members:6}],cur:'w9',toast:{text:'Đã tham gia Marketing Team'}}],
+  ['Workspace đủ thành viên',{screen:'choose',ws:[W1,{id:'w2',name:'Sales Hub',role:'member',members:6,last:'Hôm qua 17:42'}],inv:INV,dialog:FULL}],
+  ['Lời mời không còn hiệu lực',{screen:'home',ws:[W1],cur:'w1',dialog:NOT_AVAIL}]]}
+};
+function board(id,p){const b=BOARDS[id];
+  document.documentElement.setAttribute('data-theme','light');document.body.style.backgroundImage='none';document.body.style.background='#fff';document.body.style.padding='0';
+  document.getElementById('app').innerHTML=`<div class="board">${location.hash?'<a class="back" href="#">← Về wireframe bấm thử</a>':''}<h1>${esc(b.t)}</h1><div class="bsub">${esc(b.st)}</div><div class="grid">${b.items.map((it,k)=>{
+    const st=base(Object.assign({p:p||'ios'},it[1]));return `<div class="cell"><div class="ttl"><i>${String(k+1).padStart(2,'0')}</i>${esc(it[0])}</div><div data-scroll="${it[1]._scroll||0}">${phone(st)}</div></div>`}).join('')}</div><div class="bfoot">${esc(b.foot)}</div></div>`;
+  document.querySelectorAll('[data-scroll]').forEach(d=>{const s=d.querySelector('.scr');if(s&&+d.dataset.scroll){const c=s.querySelector('.card');s.scrollTop=c?c.offsetTop-12:+d.dataset.scroll}});
+}
+const q=new URLSearchParams(location.search);const hm=location.hash.match(/^#board-(us1|us2)(?:-(ios|android))?$/);
+if(q.get('board'))board(q.get('board'),q.get('p'));else if(hm)board(hm[1],hm[2]);else interactive();
+window.addEventListener('hashchange',()=>location.reload());
+</script>
+</body></html>
